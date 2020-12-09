@@ -72,3 +72,62 @@ class User(AbstractBaseUser, PermissionsMixin):
             )
 
         return token.decode('utf-8')
+
+class Post(models.Model):
+    #specifying post choices
+    ITEM_CHOICES = (
+        ("1", "Men's causual apparell"), 
+        ("2", "Men's official apparell"), 
+        ("3", "Men's sports apparell"), 
+        ("4", "Men's casual shoes"), 
+        ("5", "Men's official shoes"), 
+        ("6", "Men's sports shoes"), 
+        ("7", "Women's causual apparell"), 
+        ("8", "Women's official apparell"), 
+        ("9", "Women's sports apparell"), 
+        ("10", "Women's casual shoes"), 
+        ("11", "women's official shoes"), 
+        ("12", "women's sports shoes"),
+        ("13", "Kid's causual apparell"), 
+        ("14", "Kid's official apparell"), 
+        ("15", "Kid's sports apparell"), 
+        ("16", "Kid's shoes"), 
+        )
+    Account = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    post_image =CloudinaryField('image',  null=True) 
+    category = models.CharField( 
+        max_length = 20, 
+        choices = ITEM_CHOICES, 
+        default = '1'
+        )
+    contact = models.IntegerField()
+    contact_info = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f' {self.name} Post'
+
+
+    def create_post(self):
+        self.save()
+
+    def delete_post(self):
+        self.delete()
+                   
+    @classmethod
+    def find_post_by_id(cls,id):
+        post_result = cls.objects.get(id=id)
+        return post_result
+ 
+    @classmethod
+    def update_post(cls,current_value,new_value):
+        fetched_object = cls.objects.filter(count=current_value).update(count=new_value)
+        return fetched_object
+
+
+    @classmethod
+    def retrieve_all(cls):
+        all_objects = Post.objects.all()
+        for item in all_objects:
+            return item
+
