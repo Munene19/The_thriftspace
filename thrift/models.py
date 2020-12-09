@@ -1,7 +1,10 @@
 from django.db import models
+from cloudinary.models import CloudinaryField
 import jwt
 from datetime import datetime, timedelta
 from django.conf import settings
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 # Create your models here.
@@ -72,6 +75,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             )
 
         return token.decode('utf-8')
+
 
 class Post(models.Model):
     #specifying post choices
