@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework_simplejwt import views as jwt_views
@@ -24,18 +24,20 @@ userLogin=UserViewSet.as_view({
 })
 
 userDetail=UserViewSet.as_view({
-    'get':'retrieve'
+    'get':'retrieve' 
 })
 
 
 urlpatterns = [
+    path('', include('djoser.urls')),
+    path('', include('djoser.urls.authtoken')),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('signup/', userSignup, name='user_signup'),
     path('users/<int:pk>/', userDetail, name='user-detail'),
     path('user/', UserRetrieveUpdateAPIView.as_view()),
-    path('users/', RegistrationAPIView.as_view(), name = 'register'),
-    path('users/login/', LoginAPIView.as_view(), name = 'login'),
+    # path('users/', RegistrationAPIView.as_view(), name = 'register'),
+    # path('users/login/', LoginAPIView.as_view(), name = 'login'),
 ]
 
 if settings.DEBUG:
