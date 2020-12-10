@@ -175,6 +175,9 @@ REST_FRAMEWORK = {
     ),
 }
 
+DJOSER = {
+    'LOGIN_FIELD': 'email'
+}
 AUTH_USER_MODEL = 'thrift.User'
 
 JWT_AUTH = {
