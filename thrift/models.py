@@ -56,25 +56,15 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_full_name(self):       
         return self.username
 
-    def get_short_name(self):       
-        return self.username
 
-    def token(self):
-        return self.generate_jwt_token()
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
 
-    def generate_jwt_token(self):
-
-        user_details = {'email': self.email,
-                        'username': self.username}
-
-        token = jwt.encode(
-            {
-                'user_data': user_details,
-                'exp': datetime.now() + timedelta(hours=24)
-            }, settings.SECRET_KEY, algorithm='HS256'
-            )
-
-        return token.decode('utf-8')
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
 
 
 class Post(models.Model):
@@ -134,4 +124,8 @@ class Post(models.Model):
         all_objects = Post.objects.all()
         for item in all_objects:
             return item
+        
+
+
+
 

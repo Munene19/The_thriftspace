@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate
 
 from rest_framework import serializers
 
-from .models import User
+from .models import User, Post
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -84,3 +84,10 @@ class UserSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+class PostSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Post 
+        
+        fields=['name', 'category', 'contact', 'contact_info']
